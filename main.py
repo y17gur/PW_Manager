@@ -191,8 +191,10 @@ class PasswordManager:
 
     def show_selected_account(self):
         selected_index = self.account_listbox.curselection()
+        # print(selected_index)
         if selected_index:
             selected_email = self.account_listbox.get(selected_index[0])
+            # print(selected_email)
             email = selected_email.split("Email: ")[1].strip()
             password = self.passwords[selected_index[0]]
             self.password_entry.delete(0, END)
@@ -202,11 +204,13 @@ class PasswordManager:
                 with open("data.json", "r") as data_file:
                     data = json.load(data_file)
                     for website, accounts in data.items():
-                        for account in accounts:
-                            if account['email'] == email:
-                                self.website_combobox.delete(0, END)
-                                self.website_combobox.insert(0, website)
-                                break
+                        if website == self.website_combobox.get():
+                            # print(website)
+                            for account in accounts:
+                                if account['email'] == email:
+                                    self.website_combobox.delete(0, END)
+                                    self.website_combobox.insert(0, website)
+                                    break
             except FileNotFoundError:
                 messagebox.showinfo(title="Oops", message="No Data File Found!")
 
