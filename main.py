@@ -222,6 +222,7 @@ class PasswordManager:
         self.password_entry.delete(0, END)
         self.website_combobox.delete(0, END)
         self.website_combobox.focus()
+        self.hide_all()
 
     def hide_all(self):
         self.show_selected_button.grid_remove()
