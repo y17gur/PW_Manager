@@ -153,6 +153,7 @@ class PasswordManager:
         popup.mainloop()
 
     def find_password(self):
+        self.password_entry.delete(0, END)
         website = self.website_combobox.get()  # Retrieve selected website from the combobox
 
         # Check if the website field is empty
@@ -164,23 +165,28 @@ class PasswordManager:
             with open("data.json", "r") as data_file:
                 data = json.load(data_file)
                 if website in data:
+                    # print(f"1{website}")
                     accounts = data[website]
+                    # print(f"2{accounts}")
                     if accounts:
                         if len(accounts) == 1:
                             self.hide_all()
                             email = accounts[0]['email']
                             password = accounts[0]['password']
+                            # print(f"{password}")
                             self.email_combobox.set(email)
                             self.password_entry.delete(0, END)
                             self.password_entry.insert(0, password)
                             self.account_listbox.grid_remove()
                             self.show_selected_button.grid_remove()
                         else:
+                            self.passwords = []  # clean list inside one session
                             self.account_listbox.delete(0, END)
                             for account in accounts:
                                 email = account['email']
                                 self.account_listbox.insert(END, f"Email: {email}")
                                 self.passwords.append(account['password'])
+                                # print(f"passwords {self.passwords}")
                             self.show_all()
                     else:
                         messagebox.showinfo(title="Oops", message="No Accounts Found for this Website!")
@@ -191,10 +197,8 @@ class PasswordManager:
 
     def show_selected_account(self):
         selected_index = self.account_listbox.curselection()
-        # print(selected_index)
         if selected_index:
             selected_email = self.account_listbox.get(selected_index[0])
-            # print(selected_email)
             email = selected_email.split("Email: ")[1].strip()
             password = self.passwords[selected_index[0]]
             self.password_entry.delete(0, END)
@@ -205,7 +209,6 @@ class PasswordManager:
                     data = json.load(data_file)
                     for website, accounts in data.items():
                         if website == self.website_combobox.get():
-                            # print(website)
                             for account in accounts:
                                 if account['email'] == email:
                                     self.website_combobox.delete(0, END)
