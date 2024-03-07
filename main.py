@@ -154,6 +154,7 @@ class PasswordManager:
 
     def find_password(self):
         self.password_entry.delete(0, END)
+        self.email_combobox.delete(0, END)
         website = self.website_combobox.get()  # Retrieve selected website from the combobox
 
         # Check if the website field is empty
